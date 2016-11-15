@@ -310,6 +310,7 @@ var WrapperAddPlant = React.createClass({
             care: plant.care
         }
 
+        //test
         //phase 2: perform front end validation. 
         //if(valid){$.ajax.. }
         /*$.ajax({
