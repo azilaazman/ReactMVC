@@ -97,7 +97,7 @@ namespace ReactMVC.Controllers
                         { "water", gc.water},
                         { "care", gc.care},
                         { "light", gc.light },
-                        { "power", gc.power }
+                        //{ "power", gc.power } power is not added by user
                     }
                 }
 

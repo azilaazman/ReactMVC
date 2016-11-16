@@ -276,7 +276,6 @@ var WrapperAddPlant = React.createClass({
             water: '',
             care: '',
             light: '',
-            power: '',
 
         }
     },
@@ -301,9 +300,6 @@ var WrapperAddPlant = React.createClass({
         var e = document.getElementById("ddlCareLevel");
         this.setState({ care: e.options[e.selectedIndex].text})
     },
-    onPowerChange: function (e) {
-        this.setState({ power: e.target.value });
-    },
     onLightChange: function (e) {
         this.setState({ light: e.target.value });
     },
@@ -315,10 +311,9 @@ var WrapperAddPlant = React.createClass({
         var water = this.state.water.trim();
         var care = this.state.care.trim();
         var light = this.state.light.trim();
-        var power = this.state.power.trim();
 
         //no validation
-       this.onServerSubmit({ name: name, temp: temp, humid: humid, water: water, care: care, light: light, power: power });        
+       this.onServerSubmit({ name: name, temp: temp, humid: humid, water: water, care: care, light: light });        
     },
     onServerSubmit: function (plant) {
         //var plants = this.state.data;
@@ -337,7 +332,6 @@ var WrapperAddPlant = React.createClass({
             water: plant.water,
             care: plant.care,
             light: plant.light,
-            power: plant.power
         }
 
         //phase 2: perform front end validation. 
@@ -348,7 +342,7 @@ var WrapperAddPlant = React.createClass({
             data: data,
             success: function (data) {
                 //clear form
-                this.setState({ name: '', temp: '', humid: '', water: '', light: '', power: ''});
+                this.setState({ name: '', temp: '', humid: '', water: '', light: ''});
                 alert("Plant " + plant.name + " added!");
             }.bind(this),
             error: function (e) {
@@ -391,10 +385,10 @@ var WrapperAddPlant = React.createClass({
                           </button>
                         </span>
                       </div>
-                      <div className="form-group input-group">
+                      {/*<div className="form-group input-group">
                         <input id="power" type="text" className="form-control" placeholder="Power" value={this.state.power} onChange={this.onPowerChange}/>
                            <span className="input-group-addon">W</span>
-                      </div>
+                      </div>*/}
                       <div className="form-group input-group">
                         <input id="light" type="text" className="form-control" placeholder="Light Intensity" value={this.state.light} onChange={this.onLightChange}/>
                         <span className="input-group-addon">lm</span>
