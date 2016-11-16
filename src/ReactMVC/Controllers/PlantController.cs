@@ -95,7 +95,9 @@ namespace ReactMVC.Controllers
                         { "temp", gc.temp },
                         { "humid", gc.humid},
                         { "water", gc.water},
-                        { "care", gc.care}
+                        { "care", gc.care},
+                        { "light", gc.light },
+                        { "power", gc.power }
                     }
                 }
 

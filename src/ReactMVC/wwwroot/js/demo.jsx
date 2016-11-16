@@ -1,8 +1,10 @@
 ﻿var Nav = React.createClass({
    _addPlant: function () {
        this.props.onAddPlant();
-       console.log("click")
-    },
+   },
+   _dashboard:function(){
+       this.props.onDashboard();
+   },
   render: function() {
     return (
 
@@ -48,8 +50,8 @@
                   </span>
                 </div>{/* /input-group */}
               </li>
-              <li>
-                <a href="~/Views/Home/Index.cshtml"><i className="fa fa-dashboard fa-fw" /> Dashboard</a>
+              <li onClick={this._dashboard}>
+                <a><i className="fa fa-dashboard fa-fw" /> Dashboard</a>
               </li>
 
 
@@ -65,20 +67,44 @@
   }
 });
 var WrapperMain = React.createClass({
-    getInitialState: function () {
+    loadPlantFromServer: function () {               
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', this.props.url, true);
+        xhr.onload = function () {
+            var data = JSON.parse(xhr.responseText);
+            var length = data.length;
+            //console.log(data[length - 1]);
+            var lastData = data[length - 1]; //the json data that we want
+            this.setState({ name: lastData['name'] });
+            var gc = lastData['growing_conditions'];
+            this.setState({ temp: gc['temp'] });
+            this.setState({ humid: gc['humid'] });
+            this.setState({ light: gc['light'] });
+            this.setState({ power: gc['power'] });
+        }.bind(this);
+        xhr.send();
+    },
+   getInitialState: function(){
         return {
-            main: true
+            main: true,
+            name: '-',
+            temp: '-',
+            humid: '-',
+            water: '-',
+            care: '-',
+            light: '-',
+            power: '-',
         }
     },
    componentDidMount: function(){
        this.setState({
            main: true
        })
-       console.log("cdm main:" + this.state.main);
+       this.loadPlantFromServer();
+      //console.log("cdm main:" + this.state.main);
    },
    render: function() {
         return (
-
           <div id="page-wrapper">
             <div className="row">
               <div className="col-lg-12">
@@ -96,7 +122,7 @@ var WrapperMain = React.createClass({
                     <i className="fa fa-thermometer-empty fa-5x" />
                   </div>
                   <div className="col-xs-9 text-right">
-                    <div className="huge">26°C</div>
+                    <div className="huge">{this.state.temp}°C</div>
                     <div>Temperature</div>
                   </div>
                 </div>
@@ -118,7 +144,7 @@ var WrapperMain = React.createClass({
                     <i className="fa fa-tint fa-5x" />
                   </div>
                   <div className="col-xs-9 text-right">
-                    <div className="huge">47%</div>
+                    <div className="huge">{this.state.humid}%</div>
                     <div>Humidity</div>
                   </div>
                 </div>
@@ -140,7 +166,7 @@ var WrapperMain = React.createClass({
                     <i className="fa fa-bolt fa-5x" />
                   </div>
                   <div className="col-xs-9 text-right">
-                    <div className="huge">22W</div>
+                    <div className="huge">{this.state.power}W</div>
                     <div>Electricity</div>
                   </div>
                 </div>
@@ -162,7 +188,7 @@ var WrapperMain = React.createClass({
                     <i className="fa fa-sun-o fa-5x" />
                   </div>
                   <div className="col-xs-9 text-right">
-                    <div className="huge">1.2lm</div>
+                    <div className="huge">{this.state.light}lm</div>
                     <div>Light Intensity</div>
                   </div>
                 </div>
@@ -183,7 +209,7 @@ var WrapperMain = React.createClass({
               </div>
         {/* /.panel-heading */}
         <div className="panel-body">
-          <h4>Your CERES Unit is growing <span className="text-success">Spinach<i className="fa fa-pagelines" aria-hidden="true" /></span></h4>
+          <h4>Your CERES Unit is growing <span className="text-success">{this.state.name}<i className="fa fa-pagelines" aria-hidden="true" /></span></h4>
           <div className="list-group">
             <a href="#" className="list-group-item">
               <i className="fa fa-birthday-cake fa-fw" /> 10 January 1997
@@ -241,11 +267,6 @@ var WrapperMain = React.createClass({
 }
 });
 var WrapperAddPlant = React.createClass({
-    loadPlantFromServer: function () {
-        var xhr = new XMLHttpRequest();
-        xhr.open('get', this.props.url, true);
-        xhr.send();
-    },
     getInitialState: function(){
         return {
             main: false,
@@ -254,6 +275,8 @@ var WrapperAddPlant = React.createClass({
             humid: '',
             water: '',
             care: '',
+            light: '',
+            power: '',
 
         }
     },
@@ -261,7 +284,6 @@ var WrapperAddPlant = React.createClass({
         this.setState({
             main: false
         })
-        console.log("cdm main:" + this.state.main);
     },
     onNameChange: function(e){
         this.setState({ name: e.target.value });
@@ -279,6 +301,12 @@ var WrapperAddPlant = React.createClass({
         var e = document.getElementById("ddlCareLevel");
         this.setState({ care: e.options[e.selectedIndex].text})
     },
+    onPowerChange: function (e) {
+        this.setState({ power: e.target.value });
+    },
+    onLightChange: function (e) {
+        this.setState({ light: e.target.value });
+    },
     handleSubmit: function (e) {
         e.preventDefault();
         var name = this.state.name.trim();
@@ -286,11 +314,11 @@ var WrapperAddPlant = React.createClass({
         var humid = this.state.humid.trim();
         var water = this.state.water.trim();
         var care = this.state.care.trim();
-        if (!name || !temp || !humid || !water) {
-            return;
-        }
-        this.onServerSubmit({ name: name, temp: temp, humid: humid, water: water, care: care}); 
-        
+        var light = this.state.light.trim();
+        var power = this.state.power.trim();
+
+        //no validation
+       this.onServerSubmit({ name: name, temp: temp, humid: humid, water: water, care: care, light: light, power: power });        
     },
     onServerSubmit: function (plant) {
         //var plants = this.state.data;
@@ -307,38 +335,32 @@ var WrapperAddPlant = React.createClass({
             temp: plant.temp,
             humid: plant.humid,
             water: plant.water,
-            care: plant.care
+            care: plant.care,
+            light: plant.light,
+            power: plant.power
         }
 
-        //test
         //phase 2: perform front end validation. 
         //if(valid){$.ajax.. }
-        /*$.ajax({
+        $.ajax({
             type: "POST",
             url: this.props.submitUrl,
             data: data,
             success: function (data) {
                 //clear form
-                this.setState({ name: '', temp: '', humid: '', water: '' });
+                this.setState({ name: '', temp: '', humid: '', water: '', light: '', power: ''});
+                alert("Plant " + plant.name + " added!");
             }.bind(this),
             error: function (e) {
                 console.log(e);
-                alert('Error');
+                alert('Error: Add plant failed');
             }
-        })*/
-
-        alert("Plant " + plant.name + " added!" );
-
+        })
         console.log(data);
 
         //var xhr = new XMLHttpRequest();
         //xhr.open('post', this.props.submitUrl, true);
         //xhr.send(data);
-    },
-    _testClick: function(plant){
-        console.log(this.state.name + "\n" + this.state.temp + " " + this.state.humid + " " + this.state.water + " "+ this.state.care);
-        this.setState({ name: '', temp: '', humid: '', water: '' });
-        var e = document.getElementById("ddlCareLevel");
     },
     render: function() {
         return (
@@ -369,6 +391,15 @@ var WrapperAddPlant = React.createClass({
                           </button>
                         </span>
                       </div>
+                      <div className="form-group input-group">
+                        <input id="power" type="text" className="form-control" placeholder="Power" value={this.state.power} onChange={this.onPowerChange}/>
+                           <span className="input-group-addon">W</span>
+                      </div>
+                      <div className="form-group input-group">
+                        <input id="light" type="text" className="form-control" placeholder="Light Intensity" value={this.state.light} onChange={this.onLightChange}/>
+                        <span className="input-group-addon">lm</span>
+                      </div>
+
                       {/*<div className="form-group">
                         <label>Upload Presets</label>
                         <input type="file" />
@@ -446,29 +477,40 @@ var WrapperAddPlant = React.createClass({
 var Content = React.createClass({
     getInitialState: function () {
         return {
-            main: true
+            main: true,
+            addPlant: false
         }
     },
-    handleChecked: function () {
-        this.setState({
-            main: !this.state.main
-        })
-        console.log("handleChecked: " + this.state.main)
+    checkMain: function () {
+        if(this.state.addPlant){
+            this.setState({
+                main: true,
+                addPlant: false
+            })
+        }
+    },
+    checkAddPlant: function () {
+        if(this.state.main){
+            this.setState({
+                main: false,
+                addPlant: true
+            })
+        }
     },
     render: function () {
         if (this.state.main) {
             return (
             <div>
-            <Nav onAddPlant={this.handleChecked}/>
-            <WrapperMain/>
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} />
+            <WrapperMain url="/plants"/>
             </div>
             );
         }
         else {
             return (
             <div>
-            <Nav onAddPlant={this.handleChecked}/>
-            <WrapperAddPlant submitUrl="/plants/new" url="/plants" />
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain}/>
+            <WrapperAddPlant url="/plants" submitUrl="/plants/new"/>
             </div>
             );
         }

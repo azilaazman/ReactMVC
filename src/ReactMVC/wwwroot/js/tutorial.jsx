@@ -64,7 +64,7 @@ var CommentBox = React.createClass({
         return (
           <div className="commentBox">
             <h1>Comments</h1>
-            <CommentList data={this.state.data}/>
+            <CommentList data={this.state.data[0]}/>
             <CommentForm onCommentSubmit={this.handleCommentSubmit}/>
           </div>
       );
