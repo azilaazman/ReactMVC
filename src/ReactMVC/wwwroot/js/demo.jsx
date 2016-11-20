@@ -5,6 +5,9 @@
    _dashboard:function(){
        this.props.onDashboard();
    },
+   _settings: function(){
+       this.props.onSettings();
+   },
   render: function() {
     return (
 
@@ -18,47 +21,21 @@
           </button>
           <a className="navbar-brand" href="#"><img src="../assets/ceres-logo2.png"/></a>
         </div>{/* /.navbar-header */}
-        <ul className="nav navbar-top-links navbar-right">
-          <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#">
-              <i className="fa fa-user fa-fw" />  <i className="fa fa-caret-down" />
-            </a>
-            <ul className="dropdown-menu dropdown-user">
-              <li>
-                <a href="#"><i className="fa fa-user fa-fw" /> User Profile</a>
-              </li>
-              <li>
-                <a href="settings.html"><i className="fa fa-gear fa-fw" /> Settings</a>
-              </li>
-              <li className="divider" />
-              <li>
-                <a href="login.html"><i className="fa fa-sign-out fa-fw" /> Logout</a>
-              </li>
-            </ul>{/* /.dropdown-user */}
-          </li>{/* /.dropdown */}
-        </ul>{/* /.navbar-top-links */}
         <div className="navbar-default sidebar" role="navigation">
           <div className="sidebar-nav navbar-collapse">
             <ul className="nav" id="side-menu">
-              <li className="sidebar-search">
-                <div className="input-group custom-search-form">
-                  <input type="text" className="form-control" placeholder="Search..." />
-                  <span className="input-group-btn">
-                    <button className="btn btn-default" type="button">
-                      <i className="fa fa-search" />
-                    </button>
-                  </span>
-                </div>{/* /input-group */}
-              </li>
               <li onClick={this._dashboard}>
                 <a><i className="fa fa-dashboard fa-fw" /> Dashboard</a>
               </li>
-
-
               <li onClick={this._addPlant}>
                 <a><i className="fa fa-plus fa-fw" /> Add a new plant..</a>
-                
               </li>
+              <li onClick={this._settings}>
+                <a><i className="fa fa-gear fa-fw"></i> Settings</a>
+              </li>
+               <li>
+                <a><i className="fa fa-sign-out fa-fw"></i> Logout</a>
+               </li>
             </ul>
           </div>{/* /.sidebar-collapse */}
         </div>{/* /.navbar-static-side */}
@@ -67,7 +44,7 @@
   }
 });
 var WrapperMain = React.createClass({
-    loadPlantFromServer: function () {               
+   loadPlantFromServer: function () {
         var xhr = new XMLHttpRequest();
         xhr.open('get', this.props.url, true);
         xhr.onload = function () {
@@ -86,20 +63,16 @@ var WrapperMain = React.createClass({
     },
    getInitialState: function(){
         return {
-            main: true,
             name: '-',
             temp: '-',
             humid: '-',
             water: '-',
-            care: '-',
+            care: '',
             light: '-',
             power: '-',
         }
     },
    componentDidMount: function(){
-       this.setState({
-           main: true
-       })
        this.loadPlantFromServer();
       //console.log("cdm main:" + this.state.main);
    },
@@ -110,9 +83,9 @@ var WrapperMain = React.createClass({
               <div className="col-lg-12">
                 <h1 className="page-header">Dashboard</h1>
               </div>
-        {/* /.col-lg-12 */}
-        </div>
-        {/* /.row */}
+                {/* /.col-lg-12 */}
+            </div>
+              {/* /.row */}
         <div className="row">
           <div className="col-lg-3 col-md-6">
             <div className="panel panel-primary">
@@ -207,82 +180,215 @@ var WrapperMain = React.createClass({
               <div className="panel-heading">
                 <i className="fa fa-info-circle fa-fw" /> Information Panel
               </div>
-        {/* /.panel-heading */}
+                {/* /.panel-heading */}
         <div className="panel-body">
           <h4>Your CERES Unit is growing <span className="text-success">{this.state.name}<i className="fa fa-pagelines" aria-hidden="true" /></span></h4>
           <div className="list-group">
-            <a href="#" className="list-group-item">
-              <i className="fa fa-birthday-cake fa-fw" /> 10 January 1997
-              <span className="pull-right text-muted small">
-                <em>19 years ago</em>
-              </span>
-            </a>
-            <a href="#" className="list-group-item">
-              <i className="fa fa-hourglass-end fa-fw" /> 28 November 2016
-              <span className="pull-right text-muted small">
-                <em>24 days to go</em>
-              </span>
-            </a>
-            <a href="#" className="list-group-item">
-              <i className="fa fa-heartbeat fa-fw" /> 120bpm
-              <span className="pull-right text-muted small">
-                <em> Who knew plants could breathe?</em>
-              </span>
-            </a>
-            <a href="#" className="list-group-item">
-              <i className="fa fa-lock fa-fw" /> Locked
-              <span className="pull-right text-muted small">
-                <em>last opened 2 days ago</em>
-              </span>
-            </a>
+               <a href="#" className="list-group-item">
+                  <i className="fa fa-birthday-cake fa-fw"></i> 22 November 2016
+                    <span className="pull-right text-muted small">
+                        <em>just today</em>
+                    </span>
+               </a>
+              <a href="#" className="list-group-item">
+                    <i className="fa fa-hourglass-end fa-fw"></i> 22 December 2016
+                    <span className="pull-right text-muted small">
+                        <em>29 days to go</em>
+                    </span>
+              </a>
           </div>
-        {/* /.list-group */}
+            {/* /.list-group */}
         <a href="#" className="btn btn-default btn-block">View All Info</a>
-      </div>
-        {/* /.panel-body */}
         </div>
-        {/*/.panel*/}
-        </div>
-        {/*/.col-md-6 */}
+                {/* /.panel-body */}
+            </div>
+              {/*/.panel*/}
+          </div>
+            {/*/.col-md-6 */}
         <div className="col-md-6">
           <div className="panel panel-default">
             <div className="panel-heading">
               <i className="fa fa-bar-chart-o fa-fw" />Sunlight Intensity
             </div>
-        {/* /.panel-heading */}
+              {/* /.panel-heading */}
         <div className="panel-body">
           <div className="flot-chart">
             <div className="flot-chart-content" id="flot-line-chart-moving" style={{height: 400}} />
-                  </div>
-                </div>
-              {/* /.panel-body */}
-            </div>
-{/* /.panel */}
           </div>
-{/* /.col-lg-12 */}
-</div>
-{/* /.row */}
-</div>
+        </div>
+              {/* /.panel-body */}
+          </div>
+            {/* /.panel */}
+        </div>
+            {/* /.col-lg-12 */}
+        </div>
+              {/* /.row */}
+          </div>
     );
 }
 });
-var WrapperAddPlant = React.createClass({
-    getInitialState: function(){
+
+var WrapperSettings = React.createClass({
+    loadPlantFromServer: function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', this.props.url, true);
+        xhr.onload = function () {
+            var data = JSON.parse(xhr.responseText);
+            var length = data.length;
+            //console.log(data[length - 1]);
+            var lastData = data[length - 1]; //the json data that we want
+            this.setState({ name: lastData['name'] });
+            var gc = lastData['growing_conditions'];
+            this.setState({ temp: gc['temp'] });
+            this.setState({ humid: gc['humid'] });
+            this.setState({ light: gc['light'] });
+            this.setState({ power: gc['power'] });
+            this.setState({ water: gc['water']})
+            this.setState({ care: gc['care'] });
+        }.bind(this);
+        xhr.send();
+
+        console.log(this.state.care);
+    },
+    getInitialState: function () {
         return {
-            main: false,
             name: '',
             temp: '',
             humid: '',
             water: '',
             care: '',
             light: '',
-
         }
     },
-    componentDidMount: function(){
-        this.setState({
-            main: false
-        })
+    componentDidMount: function () {
+        this.loadPlantFromServer();
+        $('#ddlCareLevel').val('1').attr("selected", "selected");
+        //var e = document.getElementById("ddlCareLevel");
+        //e.options[this.state.care]; 
+    },
+    _setCare: function(){
+        var care = parseInt(this.state.care);        
+        $("#ddlCareLevel").val(care);
+        console.log("Care is: " + this.state.care);
+    },
+    render: function() {
+        return (
+          <div id="page-wrapper">
+            <div className="row">
+              <div className="col-lg-12">
+                <h1 className="page-header">Settings</h1>
+              </div>
+        {/* /.col-lg-12 */}
+        </div>
+        {/* /.row */}
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                Basic Information
+              </div>
+              <div className="panel-body">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <form role="form">
+                      <label>Plant Name</label>
+                      <div className="form-group input-group">
+                        <input type="text" className="form-control" value={this.state.name} />
+                        <span className="input-group-btn">
+                          <button className="btn btn-default" type="button"><i className="fa fa-search" />
+                          </button>
+                        </span>
+                      </div>
+                      <div className="form-group">
+                        <label>Upload Presets</label>
+                        <input type="file" />
+                      </div>
+                    </form>
+                  </div>
+        {/* /.col-lg-6 (nested) */}
+        <div className="col-lg-6">
+          <label>Environment Presets</label>
+          <form role="form">
+            <div className="form-group input-group">
+              <input id="temp" type="text" className="form-control" placeholder="Temperature" value={this.state.temp} />
+              <span className="input-group-addon">°C</span>
+            </div>
+            <div className="form-group input-group">
+              <input id="humidity" type="text" className="form-control" placeholder="Humidity" value={this.state.humid} />
+              <span className="input-group-addon">%</span>
+            </div>
+            <div className="form-group input-group">
+              <input id="water-level" type="text" className="form-control" placeholder="Water Level" value={this.state.water}/>
+              <span className="input-group-addon">cm</span>
+            </div>
+            <div className="form-group input-group">
+              <input id="light" type="text" className="form-control" placeholder="Light Intensity" value={this.state.light} />
+              <span className="input-group-addon">lm</span>
+            </div>
+            <div className="form-group">
+              <label>Care Level</label>
+              <select id="ddlCareLevel" className="form-control">
+                <option value="0">Default</option>
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+              </select>
+            </div>
+        {/* Button trigger modal */}
+        <button type="button" className="btn btn-success btn-md pull-right" data-toggle="modal" data-target="#myModal">
+          Save
+        </button>
+        {/* Modal */}
+        <div className="modal fade" id="myModal" tabIndex={-1} role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 className="modal-title" id="myModalLabel">Success!</h4>
+              </div>
+              <div className="modal-body">
+                Your new settings have been saved.
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                <a href="index.html" className="btn btn-primary">Back to Dashboard</a>
+              </div>
+            </div>
+        {/* /.modal-content */}
+        </div>
+        {/* /.modal-dialog */}
+        </div>
+        {/* /.modal */}
+        </form>
+      </div>
+        {/* /.col-lg-6 (nested) */}
+        </div>
+        {/* /.row (nested) */}
+        </div>
+        {/* /.panel-body */}
+        </div>
+        {/* /.panel */}
+        </div>
+        {/* /.col-lg-12 */}
+        </div>
+        {/* /.row */}
+        </div>
+      );
+    }
+});
+
+
+
+var WrapperAddPlant = React.createClass({
+    getInitialState: function(){
+        return {
+            name: '',
+            temp: '',
+            humid: '',
+            water: '',
+            care: '',
+            light: '',
+        }
     },
     onNameChange: function(e){
         this.setState({ name: e.target.value });
@@ -298,7 +404,7 @@ var WrapperAddPlant = React.createClass({
     },
     onCareLevelChange: function (e) {
         var e = document.getElementById("ddlCareLevel");
-        this.setState({ care: e.options[e.selectedIndex].text})
+        this.setState({ care: e.options[e.selectedIndex].value})
     },
     onLightChange: function (e) {
         this.setState({ light: e.target.value });
@@ -468,50 +574,73 @@ var WrapperAddPlant = React.createClass({
     }
 });
 
-var Content = React.createClass({
+var App = React.createClass({
     getInitialState: function () {
         return {
             main: true,
-            addPlant: false
+            addPlant: false,
+            settings: false,
+            login: false,
         }
     },
     checkMain: function () {
-        if(this.state.addPlant){
+        if(!this.state.main){
             this.setState({
                 main: true,
-                addPlant: false
+                addPlant: false,
+                settings: false,
             })
         }
     },
     checkAddPlant: function () {
-        if(this.state.main){
+        if(!this.state.addPlant){
             this.setState({
                 main: false,
-                addPlant: true
+                addPlant: true,
+                settings: false,
+                login: false
             })
         }
     },
+    checkSettings: function () {
+        if (!this.state.settings) {
+            this.setState({
+                main: false,
+                addPlant: false,
+                settings: true,
+                login: false,
+            })
+        }
+    }, 
     render: function () {
         if (this.state.main) {
             return (
             <div>
-            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} />
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
             <WrapperMain url="/plants"/>
             </div>
             );
         }
-        else {
+        else if(this.state.addPlant) {
             return (
             <div>
-            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain}/>
-            <WrapperAddPlant url="/plants" submitUrl="/plants/new"/>
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
+            <WrapperAddPlant submitUrl="/plants/new"/>
             </div>
             );
+        }
+        else if (this.state.settings) {
+            return (
+            <div>
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
+            <WrapperSettings url="/plants"/>
+            </div>
+                );
         }
         }
            
 });
 ReactDOM.render(
-  <Content/>,
+  <App/>,
   document.getElementById('content')
 );
