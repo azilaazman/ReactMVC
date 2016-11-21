@@ -110,25 +110,25 @@ namespace ReactMVC.Controllers
             }
         }
 
-        [Route("plants/update}")]
-        [HttpPut]
-        public ActionResult Update(PlantModel plant)
-        {
-            try
-            {
-                MongoClient client = new MongoClient("mongodb://fypadmin:12345678@ds048719.mlab.com:48719/ceres");
-                IMongoDatabase db = client.GetDatabase("ceres");
+        //[Route("plants/update}")]
+        //[HttpPut]
+        //public ActionResult Update(PlantModel plant)
+        //{
+        //    try
+        //    {
+        //        MongoClient client = new MongoClient("mongodb://fypadmin:12345678@ds048719.mlab.com:48719/ceres");
+        //        IMongoDatabase db = client.GetDatabase("ceres");
 
-                //List<PlantModel> plant_list = new List<PlantModel>();
-                var plantInfo = db.GetCollection<BsonDocument>("plant");
-            }
-            catch(Exception e)
-            {
-                throw;
-            }
+        //        //List<PlantModel> plant_list = new List<PlantModel>();
+        //        var plantInfo = db.GetCollection<BsonDocument>("plant");
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        throw;
+        //    }
 
-            return Content("Success :)");
-        }
+        //    return Content("Success :)");
+        //}
 
         // GET: /<controller>/
         public IActionResult Index()
