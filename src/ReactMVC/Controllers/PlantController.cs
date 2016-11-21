@@ -74,13 +74,11 @@ namespace ReactMVC.Controllers
         [HttpPost]
         public ActionResult addPlant(PlantModel plant, GrowingConditions gc)
         {
-            //if (ModelState.IsValid) { }
             try
             {
                 MongoClient client = new MongoClient("mongodb://fypadmin:12345678@ds048719.mlab.com:48719/ceres");
                 IMongoDatabase db = client.GetDatabase("ceres");
 
-                //List<PlantModel> plant_list = new List<PlantModel>();
                 var plantInfo = db.GetCollection<BsonDocument>("plant");
 
 
@@ -112,23 +110,22 @@ namespace ReactMVC.Controllers
             }
         }
 
-        [Route("plants/delete/{objId}")]
-        [HttpPost, ActionName("Delete")]
-        public ActionResult Delete(ObjectId objectID)
+        [Route("plants/update}")]
+        [HttpPut]
+        public ActionResult Update(PlantModel plant)
         {
-            //IMongoClient client = new MongoClient("mongodb://fypadmin:12345678@ds048719.mlab.com:48719/ceres");
+            try
+            {
+                MongoClient client = new MongoClient("mongodb://fypadmin:12345678@ds048719.mlab.com:48719/ceres");
+                IMongoDatabase db = client.GetDatabase("ceres");
 
-            // Create server settings to pass connection string, timeout, etc.
-            MongoServerSettings settings = new MongoServerSettings();
-            settings.Server = new MongoServerAddress("ds048719.mlab.com", 48719);
-            // Create server object to communicate with our server
-            MongoServer server = new MongoServer(settings);
-
-            MongoDatabase db = server.GetDatabase("ceres");
-            MongoCollection coll = db.GetCollection<BsonDocument>("plant");
-            var query = Query.EQ("_id", objectID);
-            coll.Remove(query);
-
+                //List<PlantModel> plant_list = new List<PlantModel>();
+                var plantInfo = db.GetCollection<BsonDocument>("plant");
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
 
             return Content("Success :)");
         }

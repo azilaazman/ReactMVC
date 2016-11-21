@@ -262,9 +262,22 @@ var WrapperSettings = React.createClass({
     },
     componentDidMount: function () {
         this.loadPlantFromServer();
-        $('#ddlCareLevel').val('1').attr("selected", "selected");
+        $('#ddlCareLevel').val(this.state.care).attr("selected", "selected");
         //var e = document.getElementById("ddlCareLevel");
         //e.options[this.state.care]; 
+    },
+    componentDidUpdate: function(prevProps, prevState){
+        if (this.state.care == null) {
+            console.log("null care level");
+            this.loadPlantFromServer();
+            this.setState({
+                care: this.state.care
+            })
+        }
+        else {
+            console.log("care is " + this.state.care);
+            $('#ddlCareLevel').val(this.state.care).attr("selected", "selected");
+        }
     },
     _setCare: function(){
         var care = parseInt(this.state.care);        
@@ -616,7 +629,7 @@ var App = React.createClass({
         if (this.state.main) {
             return (
             <div>
-            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} url="/plants" />
             <WrapperMain url="/plants"/>
             </div>
             );
@@ -624,7 +637,7 @@ var App = React.createClass({
         else if(this.state.addPlant) {
             return (
             <div>
-            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings}/>
             <WrapperAddPlant submitUrl="/plants/new"/>
             </div>
             );
@@ -632,7 +645,7 @@ var App = React.createClass({
         else if (this.state.settings) {
             return (
             <div>
-            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} />
+            <Nav onAddPlant={this.checkAddPlant} onDashboard={this.checkMain} onSettings={this.checkSettings} url="/plants" />
             <WrapperSettings url="/plants"/>
             </div>
                 );
